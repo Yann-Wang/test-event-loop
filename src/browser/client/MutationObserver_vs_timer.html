@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>MutationObserver vs timer</title>
+</head>
+<body>
+  <div>
+    <a href="/">back to catalog</a>
+  </div>
+  <div>MutationObserver vs timer</div>
+  <div id="container"></div>
+  <script>
+    const dom = document.getElementById('container')
+
+    var config = { attributes: true, childList: true, subtree: true };
+
+    var callback = function(mutationsList, observer) {
+        for(var mutation of mutationsList) {
+            if (mutation.type == 'childList') {
+                console.log('MutationObserver event callback')
+            }
+            else if (mutation.type == 'attributes') {
+                console.log('The ' + mutation.attributeName + ' attribute was modified.');
+            }
+        }
+    };
+
+    var observer = new MutationObserver(callback);
+
+    observer.observe(dom, config);
+
+    setTimeout(() => {
+      console.log('before trigger setTimeout')
+    })
+    console.log('before trigger MutationObserver')
+    const span = document.createElement('span')
+    span.textContent = 'hello'
+    dom.appendChild(span)
+      
+    setTimeout(() => {
+      console.log('disconnect')
+      observer.disconnect();
+    }, 3000)
+  </script>
+</body>
+</html>

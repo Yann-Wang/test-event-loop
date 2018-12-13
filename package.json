@@ -1,15 +1,19 @@
 {
   "name": "test-serve-static",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "event loop demo",
   "scripts": {
-    "start": "node index.js"
+    "start": "yarn test-in-browser && yarn test-in-node",
+    "test-in-browser": "node ./src/browser/server/app.js",
+    "test-in-node": ""
   },
   "author": "wyn",
   "license": "MIT",
   "dependencies": {
-    "finalhandler": "^1.1.0",
-    "serve-static": "^1.13.1"
+    "express": "^4.16.4",
+    "opn": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=8.11.2"
   }
 }

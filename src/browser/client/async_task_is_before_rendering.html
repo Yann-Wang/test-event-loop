@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>async task is before rendering</title>
+</head>
+<body>
+  <div>
+    <a href="/">back to catalog</a>
+  </div>
+  <div>async task is before rendering</div>
+  <div style="position: relative;height:150px;">
+    <div id="box" style="position: absolute;left: 0;top:0; width: 100px;height:100px;background:red;"></div>
+  </div>
+
+  <button id="btn">button</button>
+  <button id="btn2">button2</button>
+  <script>
+    const btn = document.getElementById('btn')
+    const box = document.getElementById('box')
+    btn.addEventListener('click', callback, false)
+    function callback() {
+      box.style.display = 'none'
+      box.style.display = 'block'
+      box.style.display = 'none'
+      box.style.display = 'block'
+      box.style.display = 'none'
+      box.style.display = 'block'
+    }
+
+    const btn2 = document.getElementById('btn2')
+    btn2.addEventListener('click', callback2, false)
+    function callback2() {
+      box.style.transform = 'translateX(800px)'
+      box.style.transition = 'transform 1s ease-in-out'
+      box.style.transform = 'translateX(100px)'
+    }
+  </script>
+
+</body>
+</html>

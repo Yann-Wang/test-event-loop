@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>event trigger will not be combined before rendering</title>
+</head>
+<body>
+  <div>
+    <a href="/">back to catalog</a>
+  </div>
+  <div>event trigger will not be combined before rendering</div>
+  <div id="container"></div>
+  <script>
+    let count = 0
+    const dom = document.getElementById('container')
+
+    var config = { attributes: true, childList: true, subtree: true };
+
+    var callback = function(mutationsList, observer) {
+        for(var mutation of mutationsList) {
+            if (mutation.type == 'childList') {
+                count++
+            }
+            else if (mutation.type == 'attributes') {
+                console.log('The ' + mutation.attributeName + ' attribute was modified.');
+            }
+        }
+    };
+
+    var observer = new MutationObserver(callback);
+
+    observer.observe(dom, config);
+
+    for(var i=0;i<50; i++) {
+      const span = document.createElement('span')
+      dom.appendChild(span)
+      span.textContent = 'hello'
+    }
+
+    setTimeout(() => {
+      // count: 100
+      console.log('Stuff added to <body>!', count)
+      observer.disconnect();
+    }, 3000)
+
+    
+  </script>
+</body>
+</html>

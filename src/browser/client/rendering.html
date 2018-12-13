@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>rendering</title>
+</head>
+<body>
+  <div>
+    <a href="/">back to catalog</a>
+  </div>
+  <h1>rendering</h1>
+  <div>没有闪屏，因为在到达event loop render ui 阶段之前，同步脚本已经执行完了</div>
+  <script>
+    const div = document.createElement('div')
+    div.textContent = 'test'
+    document.body.appendChild(div)
+    div.style.display = 'none'
+  </script>
+</body>
+</html>
