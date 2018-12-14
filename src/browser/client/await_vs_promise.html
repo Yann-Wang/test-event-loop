@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>await vs promise</title>
+</head>
+<body>
+  <div>
+    <a href="/">back to catalog</a>
+  </div>
+  <div>await vs promise</div>
+  <div>await is microtask</div>
+  <script>
+    const p = Promise.resolve();
+    setTimeout(()=>{console.log('task: setTimeout')});
+    (async ()=>{
+      console.log('before: await');
+      const q = Promise.resolve(55).then(()=> {
+        console.log('then q')
+      });
+      await q;
+      console.log('after:await q');
+      q.then(() => {
+        console.log('after:await q then')
+      })
+      await p;
+      console.log('after:await p');
+      p.then(() => {
+        console.log('after:await p then')
+      })
+    })();
+
+    const m = Promise.resolve()
+
+    m.then(()=>console.log('tick:a'))
+    .then(()=> console.log('tick:b'))
+  </script>
+</body>
+</html>

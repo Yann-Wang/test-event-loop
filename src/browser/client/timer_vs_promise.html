@@ -11,6 +11,8 @@
     <a href="/">back to catalog</a>
   </div>
   <div>timer vs promise</div>
+  <p>同步脚本也算一个task</p>
+  <p>microtask中创建的microtask会被在下一个task之前执行</p>
   <script>
     console.log('start')
     setTimeout(()=>{
@@ -40,6 +42,13 @@
           console.log('promise6')
       })
     }, 0)
+
+    Promise.resolve().then(() => {
+      console.log('promise7')
+      Promise.resolve().then(() => {
+        console.log('promise8')
+      })
+    })
   </script>
 </body>
 </html>
