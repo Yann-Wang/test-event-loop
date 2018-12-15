@@ -4,6 +4,7 @@ const open = require('opn')
 
 const app = express()
 const port = 3000
+const env = process.env.NODE_ENV
 
 const rootDir = path.join(__dirname, '../client')
 
@@ -13,6 +14,7 @@ app.listen(port, () => {
   const url = `http://localhost:${port}`
 
   console.log(`access ${url}`)
-
-  open(url)
+  if (env !== 'production') {
+    open(url)
+  }
 })
