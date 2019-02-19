@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
+  <title>await vs promise</title>
+</head>
+<body>
+  <div>
+    <a href="/">back to catalog</a>
+  </div>
+  <div>await vs promise</div>
+  <div>await is microtask</div>
+  <script>
+    const p = new Promise((resolve,reject) => {
+      Promise.resolve(666).then((data) => {
+        resolve(data)
+      })
+    })
+
+    const func = async () => {
+      await p;
+      console.log('after await')
+    }
+
+    func()
+    const q = Promise.resolve(555)
+    q.then(() => {
+      console.log('tick:a')
+    }).then(() => {
+      console.log('tick:b')
+    })
+  </script>
+</body>
+</html>

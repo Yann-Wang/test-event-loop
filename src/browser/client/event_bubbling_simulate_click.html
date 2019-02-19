@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
+  <title>event bubbling is synchronous</title>
+  <style>
+    .outer {
+      width: 300px;
+      height: 300px;
+      position: relative;
+      background: red;
+    }
+    .inner {
+      margin: auto;
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 150px;
+      height: 150px;
+      background: yellowgreen;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <a href="/">back to catalog</a>
+  </div>
+  <div>event bubbling is synchronous</div>
+  <div>MutationObserver callback 只被执行一次</div>
+  <div class="outer">
+    <div class="inner"></div>
+  </div>
+  <script>
+    // Let's get hold of those elements
+    var outer = document.querySelector('.outer');
+    var inner = document.querySelector('.inner');
+
+    // Let's listen for attribute changes on the
+    // outer element
+    new MutationObserver(function() {
+      console.log('mutate');
+    }).observe(outer, {
+      attributes: true
+    });
+
+    // Here's a click listener…
+    function onClick() {
+      console.log('click');
+
+      setTimeout(function() {
+        console.log('timeout');
+      }, 0);
+
+      Promise.resolve().then(function() {
+        console.log('promise');
+      });
+
+      outer.setAttribute('data-random', Math.random());
+    }
+
+    // …which we'll attach to both elements
+    inner.addEventListener('click', onClick);
+    outer.addEventListener('click', onClick);
+
+    inner.click();
+  </script>
+</body>
+</html>

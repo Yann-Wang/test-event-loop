@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>when promise callback execute</title>
+  <link rel="stylesheet" href="/css/prism.css">
 </head>
 <body>
   <div>
@@ -12,6 +13,20 @@
   </div>
   <div>when promise callback execute</div>
   <a id="test" href="/test">test</a>
+  <pre><code class="language-javascript">
+      const link = document.getElementById('test')
+      const nextClick = new Promise(resolve => {
+        console.log('add event listener')
+        link.addEventListener('click', resolve, {once: true})
+      })
+      
+      nextClick.then(event => {
+        event.preventDefault()
+        console.log('click callback')
+      })
+      console.log('end')
+  </code></pre>
+  <script src="/js/prism.js"></script>
   <script>
     const link = document.getElementById('test')
     const nextClick = new Promise(resolve => {

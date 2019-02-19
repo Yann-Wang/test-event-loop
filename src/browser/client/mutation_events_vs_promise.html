@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>mutation events vs promise</title>
+  <link rel="stylesheet" href="/css/prism.css">
 </head>
 <body>
   <div>
@@ -13,6 +14,31 @@
   <div>mutation events vs promise</div>
   <button id="btn">真实点击事件</button>
   <button id="btn2">模拟点击事件</button>
+  <pre><code class="language-javascript">
+      const btn = document.getElementById('btn')
+      const btn2 = document.getElementById('btn2')
+  
+      btn.addEventListener('click', () => {
+        Promise.resolve().then(() => console.log('Microtask 1'))
+        console.log('Listener 1')
+      }, false)
+  
+      btn.addEventListener('click', () => {
+        Promise.resolve().then(() => console.log('Microtask 2'))
+        console.log('Listener 2')
+      }, false)
+  
+      btn2.onclick = () => {
+        // 实验证明： click方法和两个callback是同步执行的
+        // 在两个callback执行完之前，btn.click一直在调用栈中，
+        // 所以在第一个callback执行完后，会继续执行第二个，
+        // 因为task queue 还没清空， 此时是不会执行micro task queue的
+        btn.click()
+        console.log('simulate click2')
+      }
+      console.log('start')
+  </code></pre>
+  <script src="/js/prism.js"></script>
   <script>
     const btn = document.getElementById('btn')
     const btn2 = document.getElementById('btn2')
@@ -35,6 +61,7 @@
       btn.click()
       console.log('simulate click2')
     }
+    console.log('start')
   </script>
 </body>
 </html>

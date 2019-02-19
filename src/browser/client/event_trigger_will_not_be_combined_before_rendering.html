@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>event trigger will not be combined before rendering</title>
+  <link rel="stylesheet" href="/css/prism.css">
 </head>
 <body>
   <div>
@@ -12,7 +13,7 @@
   </div>
   <div>event trigger will not be combined before rendering</div>
   <div id="container"></div>
-  <script>
+  <pre><code class="language-javascript">
     let count = 0
     const dom = document.getElementById('container')
 
@@ -22,6 +23,7 @@
         for(var mutation of mutationsList) {
             if (mutation.type == 'childList') {
                 count++
+                console.log('MutationObserver callback, count: ', count)
             }
             else if (mutation.type == 'attributes') {
                 console.log('The ' + mutation.attributeName + ' attribute was modified.');
@@ -33,14 +35,51 @@
 
     observer.observe(dom, config);
 
-    for(var i=0;i<50; i++) {
+    for(var i=0;i<5; i++) {
       const span = document.createElement('span')
       dom.appendChild(span)
       span.textContent = 'hello'
     }
+    console.log('end')
 
     setTimeout(() => {
-      // count: 100
+      // count: 10
+      console.log('Stuff added to <body>!', count)
+      observer.disconnect();
+    }, 3000)
+  </code></pre>
+  <script src="/js/prism.js"></script>
+  <script>
+    let count = 0
+    const dom = document.getElementById('container')
+
+    var config = { attributes: true, childList: true, subtree: true };
+
+    var callback = function(mutationsList, observer) {
+        for(var mutation of mutationsList) {
+            if (mutation.type == 'childList') {
+                count++
+                console.log('MutationObserver callback, count: ', count)
+            }
+            else if (mutation.type == 'attributes') {
+                console.log('The ' + mutation.attributeName + ' attribute was modified.');
+            }
+        }
+    };
+
+    var observer = new MutationObserver(callback);
+
+    observer.observe(dom, config);
+
+    for(var i=0;i<5; i++) {
+      const span = document.createElement('span')
+      dom.appendChild(span)
+      span.textContent = 'hello'
+    }
+    console.log('end')
+
+    setTimeout(() => {
+      // count: 10
       console.log('Stuff added to <body>!', count)
       observer.disconnect();
     }, 3000)

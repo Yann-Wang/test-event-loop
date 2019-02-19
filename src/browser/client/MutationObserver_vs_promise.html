@@ -4,16 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>MutationObserver vs timer</title>
+  <title>MutationObserver vs promise</title>
   <link rel="stylesheet" href="/css/prism.css">
 </head>
 <body>
   <div>
     <a href="/">back to catalog</a>
   </div>
-  <div>MutationObserver vs timer</div>
+  <div>MutationObserver vs promise</div>
+  <div id="container"></div>
   <pre><code class="language-javascript">
-    const dom = document.getElementById('container')
+      const dom = document.getElementById('container')
 
     var config = { attributes: true, childList: true, subtree: true };
 
@@ -32,20 +33,23 @@
 
     observer.observe(dom, config);
 
-    setTimeout(() => {
-      console.log('setTimeout callback')
+    Promise.resolve().then(() => {
+      console.log('promise callback before MutationObserver')
     })
     console.log('before trigger MutationObserver')
     const span = document.createElement('span')
     span.textContent = 'hello'
     dom.appendChild(span)
+
+    Promise.resolve().then(() => {
+      console.log('promise callback after MutationObserver')
+    })
       
     setTimeout(() => {
       console.log('disconnect')
       observer.disconnect();
-    }, 3000)
-  </code></pre>
-  <div id="container"></div>
+    })
+    </code></pre>
   <script src="/js/prism.js"></script>
   <script>
     const dom = document.getElementById('container')
@@ -67,18 +71,22 @@
 
     observer.observe(dom, config);
 
-    setTimeout(() => {
-      console.log('setTimeout callback')
+    Promise.resolve().then(() => {
+      console.log('promise callback before MutationObserver')
     })
     console.log('before trigger MutationObserver')
     const span = document.createElement('span')
     span.textContent = 'hello'
     dom.appendChild(span)
+
+    Promise.resolve().then(() => {
+      console.log('promise callback after MutationObserver')
+    })
       
     setTimeout(() => {
       console.log('disconnect')
       observer.disconnect();
-    }, 3000)
+    })
   </script>
 </body>
 </html>

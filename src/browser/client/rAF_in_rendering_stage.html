@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>rAF in rendering stage</title>
+  <link rel="stylesheet" href="/css/prism.css">
+</head>
+<body>
+  <div>
+    <a href="/">back to catalog</a>
+  </div>
+  <div>rAF in rendering stage</div>
+  <div id="container"></div>
+  <pre><code class="language-javascript">
+    setTimeout(() => {
+      console.log('setTimeout callback')
+    })
+    
+    Promise.resolve().then(() => {
+      console.log('promise callback before rAF')
+    })
+
+    console.log('before trigger rAF')
+
+    const rAF = window.requestAnimationFrame(() => {
+      console.log('execute rAF')
+    })
+
+    Promise.resolve().then(() => {
+      console.log('promise callback after rAF')
+    })
+      
+    setTimeout(() => {
+      window.cancelAnimationFrame(rAF)
+      console.log('calcel rAF')
+    }, 20)
+  </code></pre>
+  <div style="white-space:pre;">
+    result1:
+    before trigger rAF
+    promise callback before rAF
+    promise callback after rAF
+    setTimeout callback
+    execute rAF
+    calcel rAF
+
+    result2:
+    before trigger rAF
+    promise callback before rAF
+    promise callback after rAF
+    setTimeout callback
+    calcel rAF
+
+    result3:
+    before trigger rAF
+    promise callback before rAF
+    promise callback after rAF
+    execute rAF
+    setTimeout callback
+    calcel rAF
+  </div>
+  <script src="/js/prism.js"></script>
+  <script>
+    setTimeout(() => {
+      console.log('setTimeout callback')
+    })
+    
+    Promise.resolve().then(() => {
+      console.log('promise callback before rAF')
+    })
+
+    console.log('before trigger rAF')
+
+    const rAF = window.requestAnimationFrame(() => {
+      console.log('execute rAF')
+    })
+
+    Promise.resolve().then(() => {
+      console.log('promise callback after rAF')
+    })
+      
+    setTimeout(() => {
+      window.cancelAnimationFrame(rAF)
+      console.log('calcel rAF')
+    }, 20)
+  </script>
+</body>
+</html>

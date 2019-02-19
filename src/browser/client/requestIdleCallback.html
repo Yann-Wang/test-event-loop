@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>requestIdleCallback</title>
+</head>
+<body>
+  <div>
+    <a href="/">back to catalog</a>
+  </div>
+  <div>requestIdleCallback</div>
+  <div id="container"></div>
+  <script>
+    const span = +location.search.match(/^\?span=(\d+)/)[1] // alternative value: 20, 100, 1000
+    setTimeout(() => {
+      console.log('setTimeout callback')
+    })
+    
+    Promise.resolve().then(() => {
+      console.log('promise callback before rAF')
+    })
+
+    console.log('before trigger rAF')
+
+    const rAF = window.requestAnimationFrame(() => {
+      console.log('execute rAF')
+    })
+
+    const idle = window.requestIdleCallback(() => {
+      console.log('execute requestIdleCallback')
+    }, {timeout: 2000})
+
+    const idle2 = window.requestIdleCallback(() => {
+      console.log('execute requestIdleCallback 2')
+    }, {timeout: 2000})
+
+    Promise.resolve().then(() => {
+      console.log('promise callback after MutationObserver')
+    })
+      
+    setTimeout(() => {
+      window.cancelAnimationFrame(rAF)
+      console.log('calcel rAF')
+    },span)
+    setTimeout(() => {
+      window.cancelIdleCallback(idle)
+      window.cancelIdleCallback(idle2)
+      console.log('calcel requestIdleCallback')
+    }, 2000)
+  </script>
+</body>
+</html>

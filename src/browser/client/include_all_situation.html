@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>include all situation</title>
+</head>
+<body>
+  <div>
+    <a href="/">back to catalog</a>
+  </div>
+  <div>include all situation</div>
+  <div id="container"></div>
+  <script>
+    const dom = document.getElementById('container')
+
+    var config = { attributes: true, childList: true, subtree: true };
+
+    var callback = function(mutationsList, observer) {
+        for(var mutation of mutationsList) {
+            if (mutation.type == 'childList') {
+                console.log('MutationObserver event callback')
+                setTimeout(() => {
+                  console.log('setTimeout callback in MutationObserver')
+                })
+                Promise.resolve().then(() => {
+                  console.log('promise callback in MutationObserver')
+                })
+            }
+        }
+    };
+
+    var observer = new MutationObserver(callback);
+
+    observer.observe(dom, config);
+
+    setTimeout(() => {
+      console.log('setTimeout callback')
+    })
+    
+    Promise.resolve().then(() => {
+      console.log('promise callback before MutationObserver')
+    })
+
+    console.log('before trigger MutationObserver')
+    const span = document.createElement('span')
+    span.textContent = 'hello'
+    dom.appendChild(span)
+
+    const rAF = window.requestAnimationFrame(() => {
+      console.log('execute rAF')
+    })
+
+    const idle = window.requestIdleCallback(() => {
+      console.log('execute requestIdleCallback')
+    }, {timeout: 2000})
+
+    Promise.resolve(555).then(() => {
+      console.log('promise callback after MutationObserver')
+    });
+
+    const dd = async () => {
+      console.log('before: await');
+      const q = Promise.resolve(55).then(() => {
+        console.log('then q')
+      });
+      await q;
+      console.log('after:await q');
+      q.then(() => {
+        console.log('after:await q then')
+      })
+    }
+    dd();
+      
+    setTimeout(() => {
+      console.log('disconnect')
+      observer.disconnect();
+    })
+    setTimeout(() => {
+      window.cancelAnimationFrame(rAF)
+      console.log('calcel rAF')
+    })
+    setTimeout(() => {
+      window.cancelIdleCallback(idle)
+      console.log('calcel requestIdleCallback')
+    }, 2000)
+
+    
+  </script>
+</body>
+</html>

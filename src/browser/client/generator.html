@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>generator</title>
+  <link rel="stylesheet" href="/css/prism.css">
 </head>
 <body>
   <div>
@@ -13,6 +14,48 @@
   <div>generator</div>
   <div>调用Generator函数后，该函数不执行，返回的是一个指向内部状态的指针对象，遍历器对象(Iterator Object)</div>
   <div>每次调用next方法，内部指针就从函数头部或上一次停下来的地方开始执行，直到遇到下一个yield表达式（或return语句）为止</div>
+  <pre><code class="language-javascript">
+    function* foo() {
+      console.log('before yield 1')
+      var y = 2 * (yield ((() => {
+        console.log('yield 1')
+      })()));
+      console.log('before yield 2')
+      var z = yield ((()=>{
+        console.log('yield 2')
+      })());
+      console.log('before return')
+      return y+z;
+    }
+
+    var a = foo();
+    console.log('before next 1')
+    const next1 = a.next() 
+    console.log('next1: ', next1)
+
+    console.log('before next 2')
+    const next2 = a.next()
+    console.log('next2: ', next2)
+
+    console.log('before next 3')
+    const next3 = a.next()
+    console.log('next3: ', next3)
+
+    console.log('----------------------')
+    var b = foo();
+    console.log('before nb1')
+    const nb1 = b.next() 
+    console.log('nb1: ', nb1)
+
+    console.log('before nb2')
+    const nb2 = b.next(12)
+    console.log('nb2: ', nb2)
+
+    console.log('before nb3')
+    const nb3 = b.next(13)
+    console.log('nb3: ', nb3)
+  </code></pre>
+  <script src="/js/prism.js"></script>
   <script>
     function* foo() {
       console.log('before yield 1')

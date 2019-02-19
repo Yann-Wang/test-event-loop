@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>requestAnimation vs setTimeout</title>
+  <link rel="stylesheet" href="/css/prism.css">
 </head>
 <body>
   <div>
@@ -14,8 +15,45 @@
     <div id="box" style="position: absolute;left: 0;top:0; width: 100px;height:100px;background:red;"></div>
   </div>
   <div style="position: relative;">
-      <div id="box2" style="position: absolute;left: 0;top:0px; width: 100px;height:100px;background:yellowgreen;"></div>
-    </div>
+    <div id="box2" style="position: absolute;left: 0;top:0px; width: 100px;height:100px;background:yellowgreen;"></div>
+  </div>
+  <pre><code class="language-javascript">
+    function moveBoxForwardOnePixel() {
+      const dom = document.getElementById('box')
+      const left = +window.getComputedStyle(dom).left.slice(0,-2)
+      dom.style.left = `${left + 1}px`;
+      if (left+1 > 1200) {
+        return false
+      }
+      return true
+    }
+    function callback() {
+      const state = moveBoxForwardOnePixel();
+      if (state) {
+        requestAnimationFrame(callback)
+      }
+    }
+    callback()
+
+    function moveBoxForwardOnePixel2() {
+      const dom = document.getElementById('box2')
+      const left = +window.getComputedStyle(dom).left.slice(0,-2)
+      dom.style.left = `${left + 1}px`;
+      if (left+1 > 1200) {
+        return false
+      }
+      return true
+    }
+
+    function callback2() {
+      const state = moveBoxForwardOnePixel2();
+      if (state) {
+        setTimeout(callback2)
+      }
+    }
+    callback2()
+  </code></pre>
+  <script src="/js/prism.js"></script>
   <script>
     function moveBoxForwardOnePixel() {
       const dom = document.getElementById('box')

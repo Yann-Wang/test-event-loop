@@ -5,15 +5,42 @@
   "scripts": {
     "start": "yarn test-in-browser && yarn test-in-node",
     "test-in-browser": "node ./src/browser/server/app.js",
-    "test-in-node": ""
+    "test-in-node": "",
+    "compiler": "NODE_ENV=test babel ./src/compiler/src --out-dir ./src/compiler/dist"
   },
   "author": "wyn",
   "license": "MIT",
   "dependencies": {
+    "core-js": "^2.6.1",
     "express": "^4.16.4",
-    "opn": "^5.4.0"
+    "opn": "^5.4.0",
+    "regenerator-runtime": "^0.13.1"
   },
   "engines": {
     "node": ">=8.11.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-decorators": "^7.0.0",
+    "@babel/plugin-proposal-do-expressions": "^7.0.0",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.0.0",
+    "@babel/plugin-proposal-function-bind": "^7.0.0",
+    "@babel/plugin-proposal-function-sent": "^7.0.0",
+    "@babel/plugin-proposal-json-strings": "^7.0.0",
+    "@babel/plugin-proposal-logical-assignment-operators": "^7.0.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.0.0",
+    "@babel/plugin-proposal-numeric-separator": "^7.0.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0",
+    "@babel/plugin-proposal-pipeline-operator": "^7.0.0",
+    "@babel/plugin-proposal-throw-expressions": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-syntax-import-meta": "^7.0.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.1.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/runtime": "^7.2.0"
   }
 }

@@ -5,29 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>DOMNodeInserted</title>
+  <link rel="stylesheet" href="/css/prism.css">
 </head>
 <body>
   <div>
     <a href="/">back to catalog</a>
   </div>
-  <div>DOMNodeInserted</div>
+  <div>DOMNodeInserted callback是同步执行的</div>
+  <div>DOMNodeInserted 是一个W3C DOM Level 3 Events, 已经被废弃；应该优先选用Mutation Observers （W3C DOM Level 4 Events）</div>
   <div id="container"></div>
+  <pre>
+    <code class="language-javascript">
+      console.log('start')
+      let count = 0
+      const dom = document.getElementById('container')
+      dom.addEventListener('DOMNodeInserted', () => {
+        count++;
+        console.log('DOMNodeInserted callback', count)
+      })
+
+      for(var i=0; i<2; i++) {
+        const span = document.createElement('span');
+        dom.appendChild(span)
+        span.textContent = 'hello'
+      }
+      console.log('end')
+    </code>
+  </pre>
+  <script src="/js/prism.js"></script>
   <script>
+    console.log('start')
     let count = 0
     const dom = document.getElementById('container')
     dom.addEventListener('DOMNodeInserted', () => {
       count++
+      console.log('DOMNodeInserted callback', count)
     })
 
-    for(var i=0;i<50; i++) {
+    for(var i=0;i<2; i++) {
       const span = document.createElement('span')
       dom.appendChild(span)
       span.textContent = 'hello'
     }
-
-    setTimeout(() => {
-      console.log('Stuff added to <body>!', count)
-    }, 5000)
+    console.log('end')
   </script>
 </body>
 </html>

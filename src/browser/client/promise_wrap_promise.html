@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>promise wrap promise</title>
+  <link rel="stylesheet" href="/css/prism.css">
+</head>
+<body>
+  <div>
+    <a href="/">back to catalog</a>
+  </div>
+  <div>promise wrap promise</div>
+  <pre><code class="language-javascript">
+      console.log('start')
+      Promise.resolve().then(() => {
+        console.log('promise1')
+        setTimeout(() => {
+          console.log('setTimeout2')
+        })
+        Promise.resolve().then(() => {
+          console.log('promise3')
+        })
+      })
+      setTimeout(() => {
+        console.log('setTimeout1')
+      })
+      Promise.resolve().then(() => {
+        console.log('promise2')
+      })
+      console.log('end')
+  </code></pre>
+  <script src="/js/prism.js"></script>
+  <script>
+    console.log('start')
+    Promise.resolve().then(() => {
+      console.log('promise1')
+      setTimeout(() => {
+        console.log('setTimeout2')
+      })
+      Promise.resolve().then(() => {
+        console.log('promise3')
+      })
+    })
+    setTimeout(() => {
+      console.log('setTimeout1')
+    })
+    Promise.resolve().then(() => {
+      console.log('promise2')
+    })
+    console.log('end')
+  </script>
+</body>
+</html>

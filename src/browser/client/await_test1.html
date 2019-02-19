@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
   <title>await vs promise</title>
 </head>
 <body>
@@ -15,7 +17,7 @@
   <script>
     const p = Promise.resolve(666);
     setTimeout(()=>{console.log('task: setTimeout')});
-    const func = async ()=>{
+    (async ()=>{
       console.log('before: await');
       const q = Promise.resolve(55).then(() => {
         console.log('then q')
@@ -30,9 +32,9 @@
       p.then(() => {
         console.log('after:await p then')
       })
-    };
+    })();
 
-    func();
+    
     console.log('start')
 
     const m = Promise.resolve()

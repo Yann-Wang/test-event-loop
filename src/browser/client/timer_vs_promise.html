@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Event Loop test demo</title>
+  <link rel="stylesheet" href="/css/prism.css">
 </head>
 <body>
   <div>
@@ -13,6 +14,44 @@
   <div>timer vs promise</div>
   <p>同步脚本也算一个task</p>
   <p>microtask中创建的microtask会被在下一个task之前执行</p>
+  <pre><code class="language-javascript">
+      console.log('start')
+      setTimeout(()=>{
+        console.log('timer1')
+  
+        new Promise(function(resolve){
+          console.log('promise1');
+          for(var i = 0; i < 1000; i++) {
+              i == 99 && resolve();
+          }
+          console.log('promise2');
+        }).then(function() {
+            console.log('promise3')
+        })
+      }, 0)
+  
+      setTimeout(()=>{
+        console.log('timer2')
+  
+        new Promise(function(resolve){
+          console.log('promise4');
+          for(var i = 0; i < 1000; i++) {
+              i == 99 && resolve();
+          }
+          console.log('promise5');
+        }).then(function() {
+            console.log('promise6')
+        })
+      }, 0)
+  
+      Promise.resolve().then(() => {
+        console.log('promise7')
+        Promise.resolve().then(() => {
+          console.log('promise8')
+        })
+      })
+  </code></pre>
+  <script src="/js/prism.js"></script>
   <script>
     console.log('start')
     setTimeout(()=>{

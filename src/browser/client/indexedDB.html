@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
+  <title>indexedDB</title>
+  <style>
+    .btn {
+      border: 1px solid #333;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <a href="/">back to catalog</a>
+  </div>
+  <div>indexedDB</div>
+  <div>
+      数据库：IDBDatabase 对象
+      对象仓库：IDBObjectStore 对象
+      索引： IDBIndex 对象
+      事务： IDBTransaction 对象
+      操作请求：IDBRequest 对象
+      指针： IDBCursor 对象
+      主键集合：IDBKeyRange 对象
+  </div>
+  <div>
+    <span class="btn" onclick="add()">新增数据</span>
+    <span class="btn" onclick="read()">读取数据</span>
+    <span class="btn" onclick="readAll()">遍历数据</span>
+    <span class="btn" onclick="update()">更新数据</span>
+    <span class="btn" onclick="remove()">删除数据</span>
+    <span class="btn" onclick="readByIndex()">用索引读取数据</span>
+  </div>
+  <script>
+    console.log('init start')
+    var request = window.indexedDB.open('MyTestDatabase', 1);
+    request.onerror = function (event) {
+      console.log('数据库打开报错');
+    };
+    var db;
+
+    request.onsuccess = function (event) {
+      db = event.target.result;
+      console.log('数据库打开成功');
+    };
+
+    // 新建数据库与打开数据库是同一个操作。
+    // 如果指定的数据库不存在，就会新建。
+    // 不同之处在于，后续的操作主要在upgradeneeded事件的监听函数里面完成，
+    // 因为这时版本从无到有，所以会触发这个事件。
+    request.onupgradeneeded = function (event) {
+      console.log('onupgradeneeded');
+      db = event.target.result;
+      var objectStore;
+      if (!db.objectStoreNames.contains('person')) {
+        objectStore = db.createObjectStore('person', { keyPath: 'id' });
+        objectStore.createIndex('name', 'name', { unique: false });
+        objectStore.createIndex('email', 'email', { unique: true });
+      }
+    }
+
+    console.log('init end')
+
+    // 新增数据
+    function add() {
+      console.log('新增数据 start')
+      var request = db.transaction(['person'], 'readwrite')
+        .objectStore('person')
+        .add({ id: 1, name: '张三', age: 24, email: 'zhangsan@example.com' });
+
+      request.onsuccess = function (event) {
+        console.log('数据写入成功');
+      };
+
+      request.onerror = function (event) {
+        console.log('数据写入失败');
+      }
+      console.log('新增数据 end')
+    }
+
+    // 读取数据
+    function read() {
+      var transaction = db.transaction(['person']);
+      var objectStore = transaction.objectStore('person');
+      var request = objectStore.get(1);
+
+      request.onerror = function(event) {
+        console.log('事务失败');
+      };
+
+      request.onsuccess = function( event) {
+          if (request.result) {
+            console.log('Name: ' + request.result.name);
+            console.log('Age: ' + request.result.age);
+            console.log('Email: ' + request.result.email);
+          } else {
+            console.log('未获得数据记录');
+          }
+      };
+    }
+
+    // 遍历数据
+    function readAll() {
+      var objectStore = db.transaction('person').objectStore('person');
+
+      objectStore.openCursor().onsuccess = function (event) {
+        var cursor = event.target.result;
+
+        if (cursor) {
+          console.log('Id: ' + cursor.key);
+          console.log('Name: ' + cursor.value.name);
+          console.log('Age: ' + cursor.value.age);
+          console.log('Email: ' + cursor.value.email);
+          cursor.continue();
+        } else {
+          console.log('没有更多数据了！');
+        }
+      };
+    }
+
+    // 更新数据
+    function update() {
+      var request = db.transaction(['person'], 'readwrite')
+        .objectStore('person')
+        .put({ id: 1, name: '李四', age: 35, email: 'lisi@example.com' });
+
+      request.onsuccess = function (event) {
+        console.log('数据更新成功');
+      };
+
+      request.onerror = function (event) {
+        console.log('数据更新失败');
+      }
+    }
+
+    // 删除数据
+    function remove() {
+      var request = db.transaction(['person'], 'readwrite')
+        .objectStore('person')
+        .delete(1);
+
+      request.onsuccess = function (event) {
+        console.log('数据删除成功');
+      };
+    }
+
+    // 使用索引
+    function readByIndex() {
+      var transaction = db.transaction(['person'], 'readonly');
+      var store = transaction.objectStore('person');
+      var index = store.index('name');
+      var request = index.get('李四');
+
+      request.onsuccess = function (e) {
+        var result = e.target.result;
+        if (result) {
+          console.log('result: ', result);
+          // ...
+        } else {
+          // ...
+        }
+      }
+    }
+
+  </script>
+</body>
+</html>
